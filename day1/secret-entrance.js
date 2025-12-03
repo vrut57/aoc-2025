@@ -73,7 +73,4 @@ if (require.main === module) {
     main();
 }
 
-
-
-// function analyze
 module.exports = { processInput, part1, part2 };
