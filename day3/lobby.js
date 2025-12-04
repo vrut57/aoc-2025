@@ -34,33 +34,23 @@ function part2(input) {
     return input.map((ele) => {
         const arr = ele.split('');
         let result = [];
-        const max = Math.max(...arr.slice(0, arr.length - 12).map(Number));
+        const max = Math.max(...arr.slice(0, arr.length - 11).map(Number));
         let starts = [];
         arr.forEach((e, i) => {
-            if(parseInt(e) === max && i < arr.length - 12){
-                starts.push(i+1);
+            if(parseInt(e) === max && i <= arr.length - 12){
+                starts.push(i + 1);
                 result.push([max.toString()]);
             }
         })
         starts.forEach((x, i) => {
             let remainingLength = 11;
             while(remainingLength > 0) {
-                // console.log("Result: %s", result[i]);
-                // console.log("slicing array at index %s and %s, starting index: %s", starts[i], arr.length - remainingLength, starts[i])
-                // console.log(starts[i], arr.length - remainingLength)
-                // console.log(arr.slice(starts[i], arr.length - remainingLength + 1))
                 const segmentMax = Math.max(...arr.slice(starts[i], arr.length - remainingLength + 1).map(Number)).toString();
-                // set pointer of starts to index of that segmentMax
-                // console.log("Segment Max = %s, Index is %s", segmentMax, arr.slice(starts[i]).indexOf(segmentMax) + 1);
-                // need to check all indexes, not just the single one
                 starts[i] = starts[i] + arr.slice(starts[i]).indexOf(segmentMax) + 1;
                 result[i].push(segmentMax);
                 remainingLength--;
             }
         })
-        // console.log({result})
-        // console.log(result.map(r => r.join("")));
-        // console.log(Math.max(...result.map(r => Number(r.join("")))));
         return Math.max(...result.map(r => Number(r.join(""))))
             
     }).reduce((acc, ele) => acc + ele, 0);
