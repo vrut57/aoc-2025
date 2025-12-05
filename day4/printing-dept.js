@@ -16,54 +16,74 @@ async function processInput(filepath) {
 
 
 async function part1(input) {
-    console.log({input})
     const arrInput = input.map(ele => ele.split(""));
     let count = 0;
-    const yBound = input.length;
-    const xBound = input[0].length;
     arrInput.forEach((row, y) => {
-        // console.log({row})
         row.forEach((ele, x) => {
-            // check all elements around accounting for edges
             let colPointer = -1;
             let rowPointer = -1;
             let freeCellCount = 0;
-            //Check if roll of paper exists at that location
-            // console.log("Ele at loc: %s, coords: (%s,%s)", ele, y, x);
             if(ele === ".") {
-                // skip check bc there isn't a roll of paper there
-                // console.log("Skipping - no role of paper exists at loc")
                 return;
             }
             for(let i = colPointer; i <= 1; i++) {
                 for(let ii = rowPointer; ii <= 1; ii++) {
-                    // don't check point it's on
-                    // console.log({i, ii})
                     if(i === 0 && ii === 0) {
                         continue;
                     }
-                    if(y+i < 0 || y+i >= yBound|| x+ii < 0 || x + ii >= xBound || arrInput[y+i][x+ii] === ".") {
-                        // console.log("empty element at %s, %s", y+i, x+ii);
+                    if(y+i < 0 || y+i >= input.length|| x+ii < 0 || x + ii >= input[0].length || arrInput[y+i][x+ii] === ".") {
                         freeCellCount++;
-                    } else {
-                        // console.log("No empty element at %s, %s",y+i, x+ii )
                     }
-                    // if out of bounds, add as an empty tile
                 }
             }
             if(freeCellCount > 4) {
                 count++;
             }
-            // console.log("Free cell count: %s", freeCellCount);
-            // console.log("BREAK")
         })
     })
     return count;
 }
 
 async function part2(input) {
-    //todo
-    return "";
+    const arrInput = input.map(ele => ele.split(""));
+    let count = 0;
+    let isAccessible = true;
+    while(isAccessible) {
+        let turnCount = 0
+        let indexToFlip = [];
+        arrInput.forEach((row, y) => {
+            row.forEach((ele, x) => {
+                let colPointer = -1;
+                let rowPointer = -1;
+                let freeCellCount = 0;
+                if(ele === ".") {
+                    return;
+                }
+                for(let i = colPointer; i <= 1; i++) {
+                    for(let ii = rowPointer; ii <= 1; ii++) {
+                        if(i === 0 && ii === 0) {
+                            continue;
+                        }
+                        if(y+i < 0 || y+i >= input.length|| x+ii < 0 || x + ii >= input[0].length || arrInput[y+i][x+ii] === ".") {
+                            freeCellCount++;
+                        }
+                    }
+                }
+                if(freeCellCount > 4) {
+                    turnCount++;
+                    indexToFlip.push([y, x]);
+                }
+            })
+        })
+        indexToFlip.forEach(([y,x]) => {
+            arrInput[y][x] = ".";
+        })
+        count += turnCount;
+        if(turnCount === 0) {
+            isAccessible = false;
+        }
+    }
+    return count;
 }
 
 async function main() {
